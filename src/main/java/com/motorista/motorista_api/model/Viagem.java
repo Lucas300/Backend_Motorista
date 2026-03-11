@@ -23,6 +23,10 @@ public class Viagem {
     private LocalDateTime dataFim;
 
     private String status;
+    
+    @ManyToOne
+    @JoinColumn(name = "linha_id")
+    private Linha linha;
 
     @ManyToOne
     @JoinColumn(name = "motorista_id")
