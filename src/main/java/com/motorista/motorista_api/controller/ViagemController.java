@@ -1,4 +1,5 @@
 package com.motorista.motorista_api.controller;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,16 @@ public class ViagemController {
         this.viagemService = viagemService;
     }
 
+    @PostMapping
+    public Viagem criar(@RequestBody Viagem viagem){
+        return viagemService.salvar(viagem);
+    }
+
+    @GetMapping
+    public List<Viagem> listar(){
+        return viagemService.listar();
+    }
+
     @PostMapping("/iniciar")
     public ResponseEntity<Viagem> iniciar(@RequestBody IniciarViagemDTO dto) {
 
@@ -26,5 +37,10 @@ public class ViagemController {
                 dto.getLinhaId());
 
         return ResponseEntity.ok(viagem);
+    }
+
+    @PutMapping("/finalizar/{id}")
+    public Viagem finalizarViagem(@PathVariable("id") Long id) {
+        return viagemService.finalizarViagem(id);
     }
 }

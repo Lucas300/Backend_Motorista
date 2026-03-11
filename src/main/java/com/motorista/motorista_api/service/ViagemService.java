@@ -1,6 +1,7 @@
 package com.motorista.motorista_api.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,17 @@ public class ViagemService {
         this.linhaRepository = linhaRepository;
     }
 
+    // SALVAR VIAGEM
+    public Viagem salvar(Viagem viagem) {
+        return viagemRepository.save(viagem);
+    }
+
+    // LISTAR VIAGENS
+    public List<Viagem> listar() {
+        return viagemRepository.findAll();
+    }
+
+    // INICIAR VIAGEM
     public Viagem iniciarViagem(Long motoristaId, Long veiculoId, Long linhaId) {
 
         Motorista motorista = motoristaRepository.findById(motoristaId)
@@ -49,6 +61,21 @@ public class ViagemService {
         viagem.setVeiculo(veiculo);
         viagem.setLinha(linha);
         viagem.setDataInicio(LocalDateTime.now());
+
+        return viagemRepository.save(viagem);
+    }
+
+    // FINALIZAR VIAGEM
+    public Viagem finalizarViagem(Long viagemId) {
+
+        Viagem viagem = viagemRepository.findById(viagemId)
+                .orElseThrow(() -> new RuntimeException("Viagem não encontrada"));
+
+        if (viagem.getDataFim() != null) {
+            throw new RuntimeException("A viagem já foi finalizada");
+        }
+
+        viagem.setDataFim(LocalDateTime.now());
 
         return viagemRepository.save(viagem);
     }
