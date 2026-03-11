@@ -1,7 +1,18 @@
 package com.motorista.motorista_api.model;
 
-import jakarta.persistence.*;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "linhas")
@@ -18,6 +29,7 @@ public class Linha {
     private Empresa empresa;
 
     @OneToMany(mappedBy = "linha", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Parada> paradas;
 
     public Linha() {

@@ -1,6 +1,14 @@
 package com.motorista.motorista_api.model;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "paradas")
@@ -20,6 +28,7 @@ public class Parada {
 
     @ManyToOne
     @JoinColumn(name = "linha_id")
+    @JsonBackReference
     private Linha linha;
 
     public Parada() {
