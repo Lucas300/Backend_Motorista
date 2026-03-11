@@ -1,13 +1,9 @@
 package com.motorista.motorista_api.controller;
 
-import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.motorista.motorista_api.dto.IniciarViagemDTO;
 import com.motorista.motorista_api.model.Viagem;
 import com.motorista.motorista_api.service.ViagemService;
 
@@ -15,19 +11,20 @@ import com.motorista.motorista_api.service.ViagemService;
 @RequestMapping("/viagens")
 public class ViagemController {
 
-    private final ViagemService service;
+    private final ViagemService viagemService;
 
-    public ViagemController(ViagemService service) {
-        this.service = service;
+    public ViagemController(ViagemService viagemService) {
+        this.viagemService = viagemService;
     }
 
-    @PostMapping
-    public Viagem criar(@RequestBody Viagem viagem){
-        return service.salvar(viagem);
-    }
+    @PostMapping("/iniciar")
+    public ResponseEntity<Viagem> iniciar(@RequestBody IniciarViagemDTO dto) {
 
-    @GetMapping
-    public List<Viagem> listar(){
-        return service.listar();
+        Viagem viagem = viagemService.iniciarViagem(
+                dto.getMotoristaId(),
+                dto.getVeiculoId(),
+                dto.getLinhaId());
+
+        return ResponseEntity.ok(viagem);
     }
 }

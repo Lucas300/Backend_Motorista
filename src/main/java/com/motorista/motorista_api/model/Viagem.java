@@ -36,7 +36,15 @@ public class Viagem {
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
 
-    public Viagem() {
+    public Linha getLinha() {
+		return linha;
+	}
+
+	public void setLinha(Linha linha) {
+		this.linha = linha;
+	}
+
+	public Viagem() {
     }
 
     public Long getId() {
