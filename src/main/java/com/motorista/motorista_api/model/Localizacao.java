@@ -1,5 +1,7 @@
 package com.motorista.motorista_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -18,6 +20,7 @@ public class Localizacao {
 
     @ManyToOne
     @JoinColumn(name = "viagem_id", nullable = false)
+    @JsonIgnore
     private Viagem viagem;
 
     @Column(nullable = false)
@@ -26,7 +29,7 @@ public class Localizacao {
     @Column(nullable = false)
     private Double longitude;
 
-    private Double velocidade; // em km/h
+    private Double velocidade; // km/h
 
     @Column(nullable = false)
     private LocalDateTime dataHora;
