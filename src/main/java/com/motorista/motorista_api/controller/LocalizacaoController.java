@@ -33,4 +33,12 @@ public class LocalizacaoController {
 
         return ResponseEntity.ok(localizacaoService.listarPorViagem(viagemId));
     }
+    
+    @GetMapping("/distancia/{viagemId}")
+    public ResponseEntity<Double> calcularDistancia(@PathVariable Long viagemId) {
+
+        double distancia = localizacaoService.calcularDistanciaTotal(viagemId);
+
+        return ResponseEntity.ok(distancia);
+    }
 }

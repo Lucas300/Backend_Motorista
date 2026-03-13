@@ -9,6 +9,7 @@ import com.motorista.motorista_api.model.Localizacao;
 import com.motorista.motorista_api.model.Viagem;
 import com.motorista.motorista_api.repository.LocalizacaoRepository;
 import com.motorista.motorista_api.repository.ViagemRepository;
+import com.motorista.motorista_api.utils.GeoUtils;
 
 @Service
 public class LocalizacaoService {
@@ -35,5 +36,32 @@ public class LocalizacaoService {
 
     public List<Localizacao> listarPorViagem(Long viagemId) {
         return localizacaoRepository.findByViagemIdOrderByDataHoraAsc(viagemId);
+    }
+    
+    public double calcularDistanciaTotal(Long viagemId) {
+
+        List<Localizacao> pontos = localizacaoRepository
+                .findByViagemIdOrderByDataHoraAsc(viagemId);
+
+        if (pontos.size() < 2) {
+            return 0;
+        }
+
+        double distanciaTotal = 0;
+
+        for (int i = 1; i < pontos.size(); i++) {
+
+            Localizacao p1 = pontos.get(i - 1);
+            Localizacao p2 = pontos.get(i);
+
+            distanciaTotal += GeoUtils.calcularDistancia(
+                    p1.getLatitude(),
+                    p1.getLongitude(),
+                    p2.getLatitude(),
+                    p2.getLongitude()
+            );
+        }
+
+        return distanciaTotal;
     }
 }
