@@ -9,7 +9,5 @@ import com.motorista.motorista_api.model.Localizacao;
 
 @Repository
 public interface LocalizacaoRepository extends JpaRepository<Localizacao, Long> {
-
-    List<Localizacao> findByViagemIdOrderByDataHoraAsc(Long viagemId);
-
+	List<Localizacao> findByViagemIdOrderByDataHoraAsc(Long viagemId);
 }

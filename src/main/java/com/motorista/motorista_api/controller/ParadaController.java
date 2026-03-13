@@ -24,7 +24,7 @@ public class ParadaController {
         return ResponseEntity.ok(paradaService.salvar(parada));
     }
 
-    // Listar paradas
+    // Listar todas as paradas
     @GetMapping
     public ResponseEntity<List<Parada>> listar() {
         return ResponseEntity.ok(paradaService.listarTodas());

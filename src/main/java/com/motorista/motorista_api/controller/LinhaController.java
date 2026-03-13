@@ -3,9 +3,15 @@ package com.motorista.motorista_api.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.motorista.motorista_api.model.Linha;
+import com.motorista.motorista_api.model.Parada;
 import com.motorista.motorista_api.service.LinhaService;
 
 @RestController
@@ -34,5 +40,11 @@ public class LinhaController {
     @PostMapping
     public ResponseEntity<Linha> criar(@RequestBody Linha linha) {
         return ResponseEntity.ok(linhaService.salvar(linha));
+    }
+
+    // Rota planejada
+    @GetMapping("/{linhaId}/rota")
+    public ResponseEntity<List<Parada>> rotaPlanejada(@PathVariable Long linhaId) {
+        return ResponseEntity.ok(linhaService.buscarRotaPlanejada(linhaId));
     }
 }

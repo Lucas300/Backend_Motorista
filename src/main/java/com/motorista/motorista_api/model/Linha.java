@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,8 +32,21 @@ public class Linha {
     @OneToMany(mappedBy = "linha", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Parada> paradas;
+    
 
-    public Linha() {
+    @Column(nullable = false)
+    private Double kmPlanejado;
+    
+    
+    public Double getKmPlanejado() {
+		return kmPlanejado;
+	}
+
+	public void setKmPlanejado(Double kmPlanejado) {
+		this.kmPlanejado = kmPlanejado;
+	}
+
+	public Linha() {
     }
 
     public Long getId() {

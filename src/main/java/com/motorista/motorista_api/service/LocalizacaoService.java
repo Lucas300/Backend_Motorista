@@ -1,5 +1,6 @@
 package com.motorista.motorista_api.service;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class LocalizacaoService {
         this.viagemRepository = viagemRepository;
     }
 
+    // salvar ponto GPS
     public Localizacao salvar(Long viagemId, Localizacao localizacao) {
 
         Viagem viagem = viagemRepository.findById(viagemId)
@@ -34,14 +36,16 @@ public class LocalizacaoService {
         return localizacaoRepository.save(localizacao);
     }
 
+    // listar pontos da viagem
     public List<Localizacao> listarPorViagem(Long viagemId) {
         return localizacaoRepository.findByViagemIdOrderByDataHoraAsc(viagemId);
     }
-    
+
+    // calcular distancia total percorrida
     public double calcularDistanciaTotal(Long viagemId) {
 
-        List<Localizacao> pontos = localizacaoRepository
-                .findByViagemIdOrderByDataHoraAsc(viagemId);
+        List<Localizacao> pontos =
+                localizacaoRepository.findByViagemIdOrderByDataHoraAsc(viagemId);
 
         if (pontos.size() < 2) {
             return 0;
