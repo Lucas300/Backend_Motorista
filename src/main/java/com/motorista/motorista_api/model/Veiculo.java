@@ -1,15 +1,14 @@
 package com.motorista.motorista_api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "veiculos")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Veiculo {
 
     @Id
@@ -26,66 +25,53 @@ public class Veiculo {
 
     private Boolean ativo;
 
-    @ManyToOne
-    @JoinColumn(name = "motorista_id")
-    private Motorista motorista;
+	public Long getId() {
+		return id;
+	}
 
-    public Veiculo() {
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public String getPlaca() {
+		return placa;
+	}
 
-    public String getPlaca() {
-        return placa;
-    }
+	public void setPlaca(String placa) {
+		this.placa = placa;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getModelo() {
+		return modelo;
+	}
 
-    public void setPlaca(String placa) {
-        this.placa = placa;
-    }
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
 
-    public String getModelo() {
-        return modelo;
-    }
+	public String getMarca() {
+		return marca;
+	}
 
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
 
-    public String getMarca() {
-        return marca;
-    }
+	public Integer getAno() {
+		return ano;
+	}
 
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
+	public void setAno(Integer ano) {
+		this.ano = ano;
+	}
 
-    public Integer getAno() {
-        return ano;
-    }
+	public Boolean getAtivo() {
+		return ativo;
+	}
 
-    public void setAno(Integer ano) {
-        this.ano = ano;
-    }
-
-    public Boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
-    }
-
-    public Motorista getMotorista() {
-        return motorista;
-    }
-
-    public void setMotorista(Motorista motorista) {
-        this.motorista = motorista;
-    }
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+    
+    
 }

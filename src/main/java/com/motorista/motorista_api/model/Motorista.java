@@ -15,15 +15,15 @@ public class Motorista {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-	private String nome;
+    private String nome;
 
-    private String email;
+    private Integer matricula;
 
-    private String telefone;
+    private String cpf;
 
     private Boolean ativo;
 
-    public Long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -39,20 +39,20 @@ public class Motorista {
 		this.nome = nome;
 	}
 
-	public String getEmail() {
-		return email;
+	public Integer getMatricula() {
+		return matricula;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setMatricula(Integer matricula) {
+		this.matricula = matricula;
 	}
 
-	public String getTelefone() {
-		return telefone;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public Boolean getAtivo() {
@@ -62,4 +62,6 @@ public class Motorista {
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
 	}
+    
+    
 }

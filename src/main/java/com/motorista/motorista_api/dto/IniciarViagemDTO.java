@@ -4,7 +4,7 @@ public class IniciarViagemDTO {
 
     private Long motoristaId;
     private Long veiculoId;
-    private Long linhaId;
+    private Long linhaId; // mantém o campo linha
 
     public Long getMotoristaId() {
         return motoristaId;

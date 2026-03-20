@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.motorista.motorista_api.model.Linha;
 import com.motorista.motorista_api.model.Motorista;
@@ -45,6 +46,7 @@ public class ViagemService {
     }
 
     // INICIAR VIAGEM
+    @Transactional
     public Viagem iniciarViagem(Long motoristaId, Long veiculoId, Long linhaId) {
 
         Motorista motorista = motoristaRepository.findById(motoristaId)
@@ -56,16 +58,28 @@ public class ViagemService {
         Linha linha = linhaRepository.findById(linhaId)
                 .orElseThrow(() -> new RuntimeException("Linha não encontrada"));
 
+        // Verifica se o motorista já está em uma viagem ativa
+        if (viagemRepository.existsByMotoristaIdAndDataFimIsNull(motoristaId)) {
+            throw new RuntimeException("Motorista já está em uma viagem ativa");
+        }
+
+        // Verifica se o veículo já está em uso
+        if (viagemRepository.existsByVeiculoIdAndDataFimIsNull(veiculoId)) {
+            throw new RuntimeException("Veículo já está em uso");
+        }
+
         Viagem viagem = new Viagem();
         viagem.setMotorista(motorista);
         viagem.setVeiculo(veiculo);
         viagem.setLinha(linha);
         viagem.setDataInicio(LocalDateTime.now());
+        viagem.setDataFim(null);
 
         return viagemRepository.save(viagem);
     }
 
     // FINALIZAR VIAGEM
+    @Transactional
     public Viagem finalizarViagem(Long viagemId) {
 
         Viagem viagem = viagemRepository.findById(viagemId)

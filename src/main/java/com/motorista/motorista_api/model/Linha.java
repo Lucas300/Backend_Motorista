@@ -3,6 +3,7 @@ package com.motorista.motorista_api.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,11 +35,11 @@ public class Linha {
     private List<Parada> paradas;
     
 
-    @Column(nullable = false)
+    @Column(name = "km_planejado", nullable = false)
+    @JsonProperty("km_planejado") // <-- garante que o JSON vai mapear para este campo
     private Double kmPlanejado;
-    
-    
-    public Double getKmPlanejado() {
+
+	public Double getKmPlanejado() {
 		return kmPlanejado;
 	}
 
