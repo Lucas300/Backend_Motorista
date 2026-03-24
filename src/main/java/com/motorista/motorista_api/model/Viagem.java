@@ -1,14 +1,17 @@
 package com.motorista.motorista_api.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "viagens")
@@ -35,9 +38,20 @@ public class Viagem {
     @ManyToOne
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
+    
+    @OneToMany(mappedBy = "viagem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Localizacao> localizacoes;
 
     public Linha getLinha() {
 		return linha;
+	}
+
+	public List<Localizacao> getLocalizacoes() {
+		return localizacoes;
+	}
+
+	public void setLocalizacoes(List<Localizacao> localizacoes) {
+		this.localizacoes = localizacoes;
 	}
 
 	public void setLinha(Linha linha) {

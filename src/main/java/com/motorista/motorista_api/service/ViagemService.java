@@ -22,6 +22,14 @@ public class ViagemService {
     private final MotoristaRepository motoristaRepository;
     private final VeiculoRepository veiculoRepository;
     private final LinhaRepository linhaRepository;
+    
+    @Transactional
+    public void deletar(Long id) {
+        Viagem viagem = viagemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Viagem não encontrada"));
+
+        viagemRepository.delete(viagem);
+    }
 
     public ViagemService(
             ViagemRepository viagemRepository,

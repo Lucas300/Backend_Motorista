@@ -1,6 +1,5 @@
 package com.motorista.motorista_api.service;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -59,10 +58,10 @@ public class LocalizacaoService {
             Localizacao p2 = pontos.get(i);
 
             distanciaTotal += GeoUtils.calcularDistancia(
-                    p1.getLatitude(),
-                    p1.getLongitude(),
-                    p2.getLatitude(),
-                    p2.getLongitude()
+                    p1.getLatitude().doubleValue(),
+                    p1.getLongitude().doubleValue(),
+                    p2.getLatitude().doubleValue(),
+                    p2.getLongitude().doubleValue()
             );
         }
 

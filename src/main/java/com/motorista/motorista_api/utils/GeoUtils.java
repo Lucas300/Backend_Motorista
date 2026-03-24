@@ -2,7 +2,7 @@ package com.motorista.motorista_api.utils;
 
 public class GeoUtils {
 
-    private static final int RAIO_TERRA_KM = 6371;
+    private static final double RAIO_TERRA_KM = 6371;
 
     public static double calcularDistancia(
             double lat1, double lon1,

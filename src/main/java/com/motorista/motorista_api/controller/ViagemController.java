@@ -27,6 +27,12 @@ public class ViagemController {
     public List<Viagem> listar(){
         return viagemService.listar();
     }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        viagemService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
 
     @PostMapping("/iniciar")
     public ResponseEntity<Viagem> iniciar(@RequestBody IniciarViagemDTO dto) {
