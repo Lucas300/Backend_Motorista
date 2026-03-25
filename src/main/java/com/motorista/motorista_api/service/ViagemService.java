@@ -3,8 +3,10 @@ package com.motorista.motorista_api.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.motorista.motorista_api.model.Linha;
 import com.motorista.motorista_api.model.Motorista;
@@ -68,12 +70,18 @@ public class ViagemService {
 
         // Verifica se o motorista já está em uma viagem ativa
         if (viagemRepository.existsByMotoristaIdAndDataFimIsNull(motoristaId)) {
-            throw new RuntimeException("Motorista já está em uma viagem ativa");
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Motorista já está em uma viagem ativa"
+            );
         }
 
         // Verifica se o veículo já está em uso
         if (viagemRepository.existsByVeiculoIdAndDataFimIsNull(veiculoId)) {
-            throw new RuntimeException("Veículo já está em uso");
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Veículo já está em uso"
+            );
         }
 
         Viagem viagem = new Viagem();

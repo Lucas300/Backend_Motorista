@@ -3,6 +3,8 @@ package com.motorista.motorista_api.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,6 +41,7 @@ public class Viagem {
     @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
     
+    @JsonIgnore
     @OneToMany(mappedBy = "viagem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Localizacao> localizacoes;
 
