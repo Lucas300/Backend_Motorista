@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.motorista.motorista_api.dto.ViagemKmDTO;
 import com.motorista.motorista_api.model.Linha;
 import com.motorista.motorista_api.model.Localizacao;
 import com.motorista.motorista_api.model.Motorista;
@@ -122,5 +123,18 @@ public class ViagemService {
         }
 
         return total;
+    }
+    public ViagemKmDTO obterResumoKmViagem(Long viagemId) {
+
+        Viagem viagem = viagemRepository.findById(viagemId)
+                .orElseThrow(() -> new RuntimeException("Viagem não encontrada"));
+
+        double kmReal = calcularKmViagem(viagem);
+        double kmPlanejado = viagem.getLinha().getKmPlanejado();
+
+        double kmOcioso = kmReal - kmPlanejado;
+        boolean excedeu = kmReal > kmPlanejado;
+
+        return new ViagemKmDTO(kmReal, kmPlanejado, kmOcioso, excedeu);
     }
 }
