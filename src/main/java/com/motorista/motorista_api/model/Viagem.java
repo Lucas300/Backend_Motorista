@@ -29,7 +29,19 @@ public class Viagem {
 
     private String status;
     
-    @ManyToOne
+    @JsonIgnore
+    @OneToMany(mappedBy = "viagem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ParadaReal> paradas;
+    
+    public List<ParadaReal> getParadas() {
+		return paradas;
+	}
+
+	public void setParadas(List<ParadaReal> paradas) {
+		this.paradas = paradas;
+	}
+
+	@ManyToOne
     @JoinColumn(name = "linha_id")
     private Linha linha;
 

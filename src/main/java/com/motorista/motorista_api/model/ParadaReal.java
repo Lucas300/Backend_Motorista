@@ -1,9 +1,18 @@
 package com.motorista.motorista_api.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "parada_real")
@@ -28,6 +37,7 @@ public class ParadaReal {
     private String observacao;
 
     private LocalDateTime dataHora;
+    
 
 	public Long getId() {
 		return id;
