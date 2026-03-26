@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.motorista.motorista_api.model.Linha;
+import com.motorista.motorista_api.model.Localizacao;
 import com.motorista.motorista_api.model.Motorista;
 import com.motorista.motorista_api.model.Veiculo;
 import com.motorista.motorista_api.model.Viagem;
@@ -16,6 +17,7 @@ import com.motorista.motorista_api.repository.LinhaRepository;
 import com.motorista.motorista_api.repository.MotoristaRepository;
 import com.motorista.motorista_api.repository.VeiculoRepository;
 import com.motorista.motorista_api.repository.ViagemRepository;
+import com.motorista.motorista_api.utils.GeoUtils;
 
 @Service
 public class ViagemService {
@@ -24,14 +26,6 @@ public class ViagemService {
     private final MotoristaRepository motoristaRepository;
     private final VeiculoRepository veiculoRepository;
     private final LinhaRepository linhaRepository;
-    
-    @Transactional
-    public void deletar(Long id) {
-        Viagem viagem = viagemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Viagem não encontrada"));
-
-        viagemRepository.delete(viagem);
-    }
 
     public ViagemService(
             ViagemRepository viagemRepository,
@@ -45,17 +39,22 @@ public class ViagemService {
         this.linhaRepository = linhaRepository;
     }
 
-    // SALVAR VIAGEM
+    @Transactional
+    public void deletar(Long id) {
+        Viagem viagem = viagemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Viagem não encontrada"));
+
+        viagemRepository.delete(viagem);
+    }
+
     public Viagem salvar(Viagem viagem) {
         return viagemRepository.save(viagem);
     }
 
-    // LISTAR VIAGENS
     public List<Viagem> listar() {
         return viagemRepository.findAll();
     }
 
-    // INICIAR VIAGEM
     @Transactional
     public Viagem iniciarViagem(Long motoristaId, Long veiculoId, Long linhaId) {
 
@@ -68,20 +67,12 @@ public class ViagemService {
         Linha linha = linhaRepository.findById(linhaId)
                 .orElseThrow(() -> new RuntimeException("Linha não encontrada"));
 
-        // Verifica se o motorista já está em uma viagem ativa
         if (viagemRepository.existsByMotoristaIdAndDataFimIsNull(motoristaId)) {
-            throw new ResponseStatusException(
-                HttpStatus.CONFLICT,
-                "Motorista já está em uma viagem ativa"
-            );
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Motorista já está em uma viagem ativa");
         }
 
-        // Verifica se o veículo já está em uso
         if (viagemRepository.existsByVeiculoIdAndDataFimIsNull(veiculoId)) {
-            throw new ResponseStatusException(
-                HttpStatus.CONFLICT,
-                "Veículo já está em uso"
-            );
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Veículo já está em uso");
         }
 
         Viagem viagem = new Viagem();
@@ -89,12 +80,10 @@ public class ViagemService {
         viagem.setVeiculo(veiculo);
         viagem.setLinha(linha);
         viagem.setDataInicio(LocalDateTime.now());
-        viagem.setDataFim(null);
 
         return viagemRepository.save(viagem);
     }
 
-    // FINALIZAR VIAGEM
     @Transactional
     public Viagem finalizarViagem(Long viagemId) {
 
@@ -108,5 +97,30 @@ public class ViagemService {
         viagem.setDataFim(LocalDateTime.now());
 
         return viagemRepository.save(viagem);
+    }
+
+    // 🔥 MÉTODO CORRETO
+    public double calcularKmViagem(Viagem viagem) {
+
+        List<Localizacao> lista = viagem.getLocalizacoes();
+
+        if (lista == null || lista.size() < 2) return 0.0;
+
+        double total = 0.0;
+
+        for (int i = 0; i < lista.size() - 1; i++) {
+
+            Localizacao atual = lista.get(i);
+            Localizacao proxima = lista.get(i + 1);
+
+            total += GeoUtils.calcularDistancia(
+                    atual.getLatitude().doubleValue(),
+                    atual.getLongitude().doubleValue(),
+                    proxima.getLatitude().doubleValue(),
+                    proxima.getLongitude().doubleValue()
+            );
+        }
+
+        return total;
     }
 }

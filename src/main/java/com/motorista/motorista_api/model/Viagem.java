@@ -1,9 +1,11 @@
 package com.motorista.motorista_api.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -56,8 +58,20 @@ public class Viagem {
     @JsonIgnore
     @OneToMany(mappedBy = "viagem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Localizacao> localizacoes;
+    
+    @JsonManagedReference
+    @OneToMany(mappedBy = "viagem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Embarque> embarques = new ArrayList<>();
 
-    public Linha getLinha() {
+    public List<Embarque> getEmbarques() {
+		return embarques;
+	}
+
+	public void setEmbarques(List<Embarque> embarques) {
+		this.embarques = embarques;
+	}
+
+	public Linha getLinha() {
 		return linha;
 	}
 

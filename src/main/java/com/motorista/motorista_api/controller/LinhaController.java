@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.motorista.motorista_api.dto.LinhaKmDTO;
 import com.motorista.motorista_api.model.Linha;
 import com.motorista.motorista_api.model.Parada;
 import com.motorista.motorista_api.service.LinhaService;
@@ -46,5 +47,10 @@ public class LinhaController {
     @GetMapping("/{linhaId}/rota")
     public ResponseEntity<List<Parada>> rotaPlanejada(@PathVariable Long linhaId) {
         return ResponseEntity.ok(linhaService.buscarRotaPlanejada(linhaId));
+    }
+    
+    @GetMapping("/{linhaId}/km-total")
+    public ResponseEntity<LinhaKmDTO> obterKmTotal(@PathVariable Long linhaId) {
+        return ResponseEntity.ok(linhaService.obterResumoKm(linhaId));
     }
 }
