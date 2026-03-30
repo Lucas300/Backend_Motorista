@@ -25,4 +25,12 @@ public class ParadaService {
     public List<Parada> listarTodas() {
         return paradaRepository.findAll();
     }
+    
+ // Deletar parada por ID
+    public void deletar(Long id) {
+        if (!paradaRepository.existsById(id)) {
+            throw new RuntimeException("Parada não encontrada com ID: " + id);
+        }
+        paradaRepository.deleteById(id);
+    }
 }

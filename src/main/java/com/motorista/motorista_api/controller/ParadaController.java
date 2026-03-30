@@ -29,4 +29,11 @@ public class ParadaController {
     public ResponseEntity<List<Parada>> listar() {
         return ResponseEntity.ok(paradaService.listarTodas());
     }
+    
+ // Deletar parada
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        paradaService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -84,4 +84,12 @@ public class LinhaService {
 
         return new LinhaKmDTO(kmTotal, kmPlanejado, excedeu);
     }
+    
+    public void deletar(Long id) {
+        if (!linhaRepository.existsById(id)) {
+            throw new RuntimeException("Linha não encontrada");
+        }
+
+        linhaRepository.deleteById(id);
+    }
 }

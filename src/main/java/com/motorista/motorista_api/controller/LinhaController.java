@@ -3,6 +3,7 @@ package com.motorista.motorista_api.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,5 +53,12 @@ public class LinhaController {
     @GetMapping("/{linhaId}/km-total")
     public ResponseEntity<LinhaKmDTO> obterKmTotal(@PathVariable Long linhaId) {
         return ResponseEntity.ok(linhaService.obterResumoKm(linhaId));
+    }
+    
+ // Deletar linha
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        linhaService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
