@@ -92,4 +92,20 @@ public class LinhaService {
 
         linhaRepository.deleteById(id);
     }
+    
+    public Linha atualizar(Long id, Linha linhaAtualizada) {
+        Linha linhaExistente = buscarPorId(id);
+
+        // Atualiza apenas os campos necessários
+        linhaExistente.setNome(linhaAtualizada.getNome());
+        linhaExistente.setEmpresa(linhaAtualizada.getEmpresa());
+        linhaExistente.setKmPlanejado(linhaAtualizada.getKmPlanejado());
+
+        // ⚠️ Paradas (cuidado aqui)
+        if (linhaAtualizada.getParadas() != null) {
+            linhaExistente.setParadas(linhaAtualizada.getParadas());
+        }
+
+        return linhaRepository.save(linhaExistente);
+    }
 }

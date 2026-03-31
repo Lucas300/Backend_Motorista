@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,5 +61,11 @@ public class LinhaController {
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         linhaService.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+    
+ // Atualizar linha
+    @PutMapping("/{id}")
+    public ResponseEntity<Linha> atualizar(@PathVariable Long id, @RequestBody Linha linha) {
+        return ResponseEntity.ok(linhaService.atualizar(id, linha));
     }
 }
