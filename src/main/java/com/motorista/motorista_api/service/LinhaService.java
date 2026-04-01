@@ -1,5 +1,6 @@
 package com.motorista.motorista_api.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -107,5 +108,62 @@ public class LinhaService {
         }
 
         return linhaRepository.save(linhaExistente);
+    }
+    
+    public double calcularKmLinhaNoMes(Long linhaId, int mes, int ano) {
+
+        LocalDateTime inicio = LocalDateTime.of(ano, mes, 1, 0, 0);
+
+        LocalDateTime fim = inicio.withDayOfMonth(inicio.toLocalDate().lengthOfMonth())
+                                  .withHour(23).withMinute(59).withSecond(59);
+
+        List<Viagem> viagens = viagemRepository.buscarPorLinhaEPeriodo(linhaId, inicio, fim);
+
+        double total = 0.0;
+
+        for (Viagem v : viagens) {
+            total += viagemService.calcularKmViagem(v);
+        }
+
+        return total;
+    }
+    
+    public String statusLinhaMensal(Long linhaId, int mes, int ano) {
+
+        Linha linha = buscarPorId(linhaId);
+
+        double kmTotal = calcularKmLinhaNoMes(linhaId, mes, ano);
+        double kmPlanejado = linha.getKmPlanejado();
+
+        if (kmTotal > kmPlanejado) {
+            return "EXCEDEU";
+        }
+
+        if (kmTotal >= kmPlanejado * 0.9) {
+            return "ALERTA";
+        }
+
+        return "OK";
+    }
+    
+    public LinhaKmDTO obterResumoKmMensal(Long linhaId, int mes, int ano) {
+
+        Linha linha = buscarPorId(linhaId);
+
+        double kmTotal = calcularKmLinhaNoMes(linhaId, mes, ano);
+        double kmPlanejado = linha.getKmPlanejado();
+
+        boolean excedeu = kmTotal > kmPlanejado;
+
+        String status;
+        if (kmTotal > kmPlanejado) {
+            status = "EXCEDEU";
+        } else if (kmTotal >= kmPlanejado * 0.9) {
+            status = "ALERTA";
+        } else {
+            status = "OK";
+        }
+
+        return new LinhaKmDTO(kmTotal, kmPlanejado, excedeu, status);
     }
 }
