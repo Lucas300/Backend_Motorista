@@ -27,4 +27,10 @@ public interface ViagemRepository extends JpaRepository<Viagem, Long> {
     	""")
     	List<Viagem> buscarPorLinhaEPeriodo(Long linhaId, LocalDateTime inicio, LocalDateTime fim);
     
+    @Query("""
+    	    SELECT v FROM Viagem v
+    	    WHERE v.dataInicio BETWEEN :inicio AND :fim
+    	""")
+    	List<Viagem> buscarPorPeriodo(LocalDateTime inicio, LocalDateTime fim);
+    
 }

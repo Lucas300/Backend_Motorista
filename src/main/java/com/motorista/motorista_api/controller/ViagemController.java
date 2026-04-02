@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.motorista.motorista_api.dto.IniciarViagemDTO;
@@ -61,5 +62,15 @@ public class ViagemController {
     @GetMapping("/{id}/km")
     public ResponseEntity<ViagemKmDTO> obterKmViagem(@PathVariable Long id) {
         return ResponseEntity.ok(viagemService.obterResumoKmViagem(id));
+    }
+    
+    @GetMapping("/excedidas-mes")
+    public ResponseEntity<List<ViagemKmDTO>> listarExcedidasNoMes(
+            @RequestParam int mes,
+            @RequestParam int ano) {
+
+        return ResponseEntity.ok(
+            viagemService.listarViagensExcedidasNoMes(mes, ano)
+        );
     }
 }

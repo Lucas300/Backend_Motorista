@@ -2,6 +2,7 @@ package com.motorista.motorista_api.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -100,7 +101,6 @@ public class ViagemService {
         return viagemRepository.save(viagem);
     }
 
-    // 🔥 MÉTODO CORRETO
     public double calcularKmViagem(Viagem viagem) {
 
         List<Localizacao> lista = viagem.getLocalizacoes();
@@ -114,16 +114,22 @@ public class ViagemService {
             Localizacao atual = lista.get(i);
             Localizacao proxima = lista.get(i + 1);
 
-            total += GeoUtils.calcularDistancia(
+            double distancia = GeoUtils.calcularDistancia(
                     atual.getLatitude().doubleValue(),
                     atual.getLongitude().doubleValue(),
                     proxima.getLatitude().doubleValue(),
                     proxima.getLongitude().doubleValue()
             );
+
+            // 🔥 FILTRO ANTI-RUÍDO GPS
+            if (distancia > 0.01 && distancia < 1) {
+                total += distancia;
+            }
         }
 
         return total;
     }
+    
     public ViagemKmDTO obterResumoKmViagem(Long viagemId) {
 
         Viagem viagem = viagemRepository.findById(viagemId)
@@ -136,5 +142,37 @@ public class ViagemService {
         boolean excedeu = kmReal > kmPlanejado;
 
         return new ViagemKmDTO(kmReal, kmPlanejado, kmOcioso, excedeu);
+    }
+    
+    public List<ViagemKmDTO> listarViagensExcedidasNoMes(int mes, int ano) {
+
+        LocalDateTime inicio = LocalDateTime.of(ano, mes, 1, 0, 0);
+
+        LocalDateTime fim = inicio.withDayOfMonth(inicio.toLocalDate().lengthOfMonth())
+                                  .withHour(23).withMinute(59).withSecond(59);
+
+        List<Viagem> viagens = viagemRepository.buscarPorPeriodo(inicio, fim);
+
+        List<ViagemKmDTO> excedidas = new ArrayList<>();
+
+        for (Viagem v : viagens) {
+
+            double kmReal = calcularKmViagem(v);
+            double kmPlanejado = v.getLinha().getKmPlanejado();
+
+            if (kmReal > kmPlanejado) {
+
+                double kmOcioso = kmReal - kmPlanejado;
+
+                excedidas.add(new ViagemKmDTO(
+                    kmReal,
+                    kmPlanejado,
+                    kmOcioso,
+                    true
+                ));
+            }
+        }
+
+        return excedidas;
     }
 }
